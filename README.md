@@ -4,4 +4,4 @@ Add .env file to the backend folder with the connection credintials to your mong
 
 eg.
 
-ATLAS_URI = mongodb+srv://<username>:<password>@<locatioin>?retryWrites=true&w=majority
+ATLAS_URI = mongodb+srv://{username}:{password}@{locatioin}?retryWrites=true&w=majority
