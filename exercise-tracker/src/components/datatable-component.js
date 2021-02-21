@@ -4,7 +4,12 @@ import React, { Component } from 'react';
 //require('datatables.net-bs4');
 import 'datatables.net-dt/css/jquery.dataTables.css';
 import 'datatables.net-dt/js/dataTables.dataTables.js';
+import 'datatables.net-responsive-dt/css/responsive.dataTables.css';
+import 'datatables.net-responsive-dt/js/responsive.dataTables.js';
 require('datatables.net-dt');
+require( 'datatables.net-responsive-dt');
+//require( 'datatables.net-bs4' );
+//require( 'datatables.net-responsive-bs4' );
 var $  = require( 'jquery' );
 
 // deleteExercise: this.deleteExercise, keyid: this.randomKey() } })}</tbody>)}                    
@@ -19,12 +24,14 @@ export default class DataTable extends Component {
     
 
     componentDidMount() {
-      console.log(this.props);
+      //console.log(this.props);
         this.$el = $(this.el);
         this.dataTable = this.$el.DataTable({
-            data: this.props.data,
-            columns: this.props.columns,
-            ...this.props.options
+            responsive: this.props.arg.responsive,
+            data: this.props.arg.data,
+            columns: this.props.arg.columns,
+            columnDefs: this.props.columnDefs,
+            ...this.props.arg.options
         });
     }
 
@@ -38,6 +45,6 @@ export default class DataTable extends Component {
     };
 
     render() {
-        return <table ref={(el) => (this.el = el)} />;
+        return <table className="display responsive nowrap" style={{width: "100%"}} ref={(el) => (this.el = el)} />;
     }
 }
