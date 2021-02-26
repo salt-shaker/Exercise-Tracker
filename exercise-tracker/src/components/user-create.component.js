@@ -60,8 +60,8 @@ export default class UserCreate extends Component {
                 this.setState({
                     toast: this.state.toast.filter(e => keyid !== e.keyid)
                 })
-                console.log(this.state.toast.filter(e => keyid !== e.keyid))
-                Promise.resolve(`Key ${keyid} Removed`);
+                console.log(`Key ${keyid} Removed`)
+                Promise.resolve();
             }, 5000);
         });
 
@@ -104,8 +104,8 @@ export default class UserCreate extends Component {
     }
 
     async f1(keyid) {
-        var x = await this.removeToast(keyid);
-        console.log(x); // 10
+        await this.removeToast(keyid);
+        //console.log('key removed'); // 10
         //this.removeToast(key)
     }
 
@@ -136,7 +136,7 @@ export default class UserCreate extends Component {
                         let newToast = {
                             title: "Success",
                             message: `${this.state.username} added`,
-                            keyid: this.randomKey
+                            keyid: this.randomKey()
                         }
                         if (this.state.toast.length > 0) {
                             this.setState({
@@ -166,7 +166,7 @@ export default class UserCreate extends Component {
                             title: "Failed",
                             message: errorMessage,
                             component: 'popupToast',
-                            keyid: this.randomKey
+                            keyid: this.randomKey()
                         }
                         if (this.state.toast.length > 0) {
                             this.setState({
