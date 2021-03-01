@@ -16,13 +16,12 @@ router.route('/add').post((req, res) => {
         .then(users => {
             let duplicate = users.filter(v => v.username === username);
             if (users.length > 29) {
-                res.json({ userAdd: false, userExist: false, maxLimit: true  })
+                res.json({ userAdd: false, userExist: false, maxLimit: true })
             } else if (duplicate.length > 0) {
                 res.json({ userAdd: false, userExist: true, maxLimit: false })
             } else {
                 newUser.save()
-                    .then(res.json({ userAdd: true, userExist: false, maxLimit: false })
-                    )
+                    .then(res.json({ userAdd: true, userExist: false, maxLimit: false, user: newUser }))
                     .catch(err => res.status(400).json('Error: ' + err));
             }
         })
@@ -31,7 +30,7 @@ router.route('/add').post((req, res) => {
 
 router.route('/i/:id').delete((req, res) => {
     User.findByIdAndDelete(req.params.id)
-        .then(() => res.json('User deleted.'))
+        .then(() => res.json({ userRemoved: true }))
         .catch(err => res.status(400).json('Error: ' + err));
 });
 

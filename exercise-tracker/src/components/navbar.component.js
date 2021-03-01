@@ -8,7 +8,7 @@ export default class TrackerNavbar extends Component {
 
     render() {
         return (
-                <Navbar bg="light" expand="lg">
+                <Navbar expand="lg">
                     <Link className="navbar-brand" to="/dashboard">Exercise Tracker</Link>
                     <Navbar.Toggle aria-controls="basic-navbar-nav" />
                     <Navbar.Collapse id="basic-navbar-nav">

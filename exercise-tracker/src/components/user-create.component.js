@@ -60,7 +60,7 @@ export default class UserCreate extends Component {
                 this.setState({
                     toast: this.state.toast.filter(e => keyid !== e.keyid)
                 })
-                console.log(`Key ${keyid} Removed`)
+                //console.log(`Key ${keyid} Removed`)
                 Promise.resolve();
             }, 5000);
         });
@@ -69,27 +69,38 @@ export default class UserCreate extends Component {
 
     deleteUser(e) {
         e.preventDefault();
-        const user = this.state.objUsers.find(user => user.username === this.state.deleteUsername);
-        //console.log(JSON.stringify(user));
-        axios.delete('http://localhost:5000/users/i/' + user._id)
-            .then((res) => {
-                console.log(res.data);
-                this.setState({
-                    objUsers: this.state.objUsers.filter(el => el._id !== user._id),
-                    users: this.state.users.filter(el => el !== user.username)
-                })
 
-                axios.get('http://localhost:5000/users/')
-                    .then((res) => {
-                        this.setState({
-                            users: res.data.map(x => x.username),
-                            objUsers: res.data,
-                            deleteUsername: res.data[0].username
-                        })
-                    })
-                    .catch(err => console.log(' ' + err));
+        if (!this.state.inputIsDisabled) {
+            this.setState({
+                inputIsDisabled: true
             })
-            .catch(err => console.log(' ' + err));
+
+            this.delayInput(1000, () => this.setState({ inputIsDisabled: false }))
+
+            const user = this.state.objUsers.find(user => user.username === this.state.deleteUsername);
+            //console.log(JSON.stringify(user));
+            axios.delete('http://localhost:5000/users/i/' + user._id)
+                .then((res) => {
+                    //console.log(res.data);
+                    this.setState({
+                        objUsers: this.state.objUsers.filter(el => el._id !== user._id),
+                        users: this.state.users.filter(el => el !== user.username)
+                    })
+
+
+                    axios.get('http://localhost:5000/users/')
+                        .then((res) => {
+                            this.setState({
+                                users: res.data.map(x => x.username),
+                                objUsers: res.data,
+                                deleteUsername: res.data[0].username
+                            })
+                        })
+                        .catch(err => console.log(' ' + err));
+
+                })
+                .catch(err => console.log(' ' + err));
+        }
 
 
     }
@@ -128,11 +139,20 @@ export default class UserCreate extends Component {
             }
 
             //const randomKey = Math.floor((Math.random() * 100) * (Date.now() * 3.14));
-            console.log(user);
+            //console.log(user);
 
             axios.post('http://localhost:5000/users/add', user)
                 .then((res) => {
                     if (res.data.userAdd) {
+
+                        //console.log(res.data.user.username);
+                        console.log(res.data.user);
+                        
+                        this.setState({
+                            users: [...this.state.users, res.data.user.username],
+                            objUsers: [...this.state.objUsers, res.data.user]
+                        })
+                        
                         let newToast = {
                             title: "Success",
                             message: `${this.state.username} added`,
@@ -141,19 +161,16 @@ export default class UserCreate extends Component {
                         if (this.state.toast.length > 0) {
                             this.setState({
                                 username: '',
-                                toast: [...this.state.toast, newToast],
-                                users: [...this.state.users, user.username]
+                                toast: [...this.state.toast, newToast]
                             })
-                            console.log(this.state);
+                            //console.log(this.state);
                             this.f1(newToast.keyid);
                         } else {
                             this.setState({
                                 username: '',
-                                toast: [newToast],
-                                users: [...this.state.users, user.username]
+                                toast: [newToast]
                             })
-                            console.log(this.state);
-
+                            //console.log(this.state);
                             this.f1(newToast.keyid);
                         }
                     } else {
@@ -173,14 +190,14 @@ export default class UserCreate extends Component {
                                 username: '',
                                 toast: [...this.state.toast, newToast],
                             })
-                            console.log(this.state);
+                            //console.log(this.state);
                             this.f1(newToast.keyid);
                         } else {
                             this.setState({
                                 username: '',
                                 toast: [newToast],
                             })
-                            console.log(this.state);
+                            //console.log(this.state);
 
                             this.f1(newToast.keyid);
                         }
@@ -240,7 +257,7 @@ export default class UserCreate extends Component {
                     </div>
 
                     <div className="form-group">
-                        <input type="submit" value="Delete User" className="btn btn-primary" />
+                        <input type="submit" value="Delete User" className="btn btn-primary" disabled={this.state.inputIsDisabled} />
                     </div>
                 </form>
 
